@@ -6,7 +6,12 @@
 # http://doc.scrapy.org/en/latest/topics/items.html
 
 import scrapy
+import re
 
+def serialize_price(value):
+    regex = re.compile('[\d,.]+')
+    commas = re.compile(',')
+    return float(commas.sub('', regex.search(value).group()))
 
 class Vehicle(scrapy.Item):
     # define the fields for your item here like:
@@ -16,4 +21,4 @@ class Vehicle(scrapy.Item):
     make = scrapy.Field()
     model = scrapy.Field()
     kilometers = scrapy.Field()
-    price = scrapy.Field()
+    price = scrapy.Field(serializer=serialize_price)

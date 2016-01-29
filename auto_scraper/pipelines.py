@@ -4,8 +4,8 @@
 #
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
+from scrapy.exporters import BaseItemExporter
 
-
-class AutoScraperPipeline(object):
+class AutoScraperPipeline(BaseItemExporter):
     def process_item(self, item, spider):
         return item
