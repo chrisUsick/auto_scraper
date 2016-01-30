@@ -8,10 +8,19 @@
 import scrapy
 import re
 
-def serialize_price(value):
+def serialize_number(value):
     regex = re.compile('[\d,.]+')
     commas = re.compile(',')
     return float(commas.sub('', regex.search(value).group()))
+
+def serialize_kilometers(value):
+    kms = re.compile('(km|kms)')
+    match = kms.search(value)
+    if match:
+        return serialize_number(value)
+    else:
+        return serialize_number(value)/1.6
+
 
 class Vehicle(scrapy.Item):
     # define the fields for your item here like:
@@ -20,5 +29,5 @@ class Vehicle(scrapy.Item):
     year = scrapy.Field()
     make = scrapy.Field()
     model = scrapy.Field()
-    kilometers = scrapy.Field()
-    price = scrapy.Field(serializer=serialize_price)
+    kilometers = scrapy.Field(serializer=serialize_kilometers)
+    price = scrapy.Field(serializer=serialize_number)
