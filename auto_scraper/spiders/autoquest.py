@@ -18,6 +18,9 @@ class AutoquestSpider(scrapy.Spider):
         url = response.urljoin(next_page)
         yield scrapy.Request(url, callback=self.parse)
     def parse_vehicle(self, response):
+        """
+        :type response: scrapy.http.Response
+        """
         item = Vehicle()
         item['name'] = response.css(".bd2 > h1::text")[0].extract()
         item['year'] = response.css('ul.details > li.year span::text')[0].extract()
@@ -25,4 +28,10 @@ class AutoquestSpider(scrapy.Spider):
         item['model'] = response.css('ul.details > li.model span::text')[0].extract()
         item['kilometers'] = response.css('ul.details > li.odometer span::text')[0].extract()
         item['price'] = response.css('ul.pricing > li > span strong.price::text')[0].extract()
+        item['url'] = response.url
+        item['transmission'] = response.css('ul.details > li.transmission span::text')[0].extract()
+        item['drive'] = response.css('ul.details > li.driveLine span::text')[0].extract()
+        item['body_style'] = response.css('ul.details > li.bodyStyle span::text')[0].extract()
+        item['img_url'] = response.css('.imageViewer a img::attr(src)')[0].extract()
+        item['site'] = response.url
         yield item
